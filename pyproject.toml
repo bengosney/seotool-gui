@@ -1,0 +1,25 @@
+[project]
+name = "SEO Tool GUI"
+version = "0.0.1"
+description = "GUI for the Plugin based SEO Reporting Tool"
+authors = [
+    "Ben Gosney <bengosney@googlemail.com>"
+]
+python = "^3.8"
+repository = "https://github.com/bengosney/seotool-gui/"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 120
+target-version = ['py37']
+
+[tool.pycln]
+all = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    'ignore:Using or importing the ABCs:DeprecationWarning',
+]
