@@ -1,0 +1,25 @@
+[project]
+name = "seotool-gui"
+version = "0.0.1"
+description = "GUI for seotool"
+authors = [
+    "Ben Gosney <bengosney@googlemail.com>"
+]
+python = "^3.10"
+repository = "https://github.com/bengosney/seotool/"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+
+[tool.pycln]
+all = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    'ignore:Using or importing the ABCs:DeprecationWarning',
+]
