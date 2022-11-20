@@ -3,24 +3,50 @@ import asyncio
 
 # Third Party
 import flet as ft
+import pkg_resources
 from seotool.crawl import Crawler
 
 # First Party
 from processors import ResultSet, hookimpl_processor
 
 
+def get_engines() -> list[str]:
+    engines = []
+    for entry_point in pkg_resources.iter_entry_points("seo_engines"):
+        engines.append(entry_point.name)
+    return engines
+
+
 def main(page: ft.Page):
     page.theme_mode = "dark"
+
+    engines = get_engines()
+    engine_group = ft.Column(
+        [
+            ft.Text("Engines:"),
+            ft.RadioGroup(value=engines[0], content=ft.Column([ft.Radio(label=e, value=e) for e in engines])),
+        ]
+    )
+    options_tab = ft.Tab(
+        text="options",
+        content=ft.Container(
+            ft.Column(controls=[engine_group], expand=1),
+            expand=1,
+            padding=25,
+        ),
+    )
 
     site_input = ft.TextField(label="Site", value="https://www.stretchtheirlegs.co.uk/")
     log_list = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
     log_tab = ft.Tab(text="Log", content=ft.Container(content=log_list))
+    default_tabs = [
+        options_tab,
+        log_tab,
+    ]
     tabs = ft.Tabs(
         animation_duration=300,
         expand=1,
-        tabs=[
-            log_tab,
-        ],
+        tabs=default_tabs,
     )
 
     class LogIt:
@@ -60,8 +86,8 @@ def main(page: ft.Page):
 
     def button_clicked(e):
         log_list.controls = []
-        tabs.tabs = [log_tab]
-        crawler = Crawler(url=f"{site_input.value}", ignore_robots=True)
+        tabs.tabs = default_tabs
+        crawler = Crawler(url=f"{site_input.value}", ignore_robots=True, engine="playwrite")
         crawler.plugin_manager.register(LogIt(), "LogIt")
 
         asyncio.run(crawler.crawl())
