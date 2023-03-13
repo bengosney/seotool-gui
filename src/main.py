@@ -87,7 +87,7 @@ def main(page: ft.Page):
     def button_clicked(e):
         log_list.controls = []
         tabs.tabs = default_tabs
-        crawler = Crawler(url=f"{site_input.value}", ignore_robots=True, engine="playwrite")
+        crawler = Crawler(url=f"{site_input.value}", ignore_robots=True)
         crawler.plugin_manager.register(LogIt(), "LogIt")
 
         asyncio.run(crawler.crawl())
